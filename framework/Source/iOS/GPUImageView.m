@@ -8,7 +8,7 @@
 #pragma mark -
 #pragma mark Private methods and instance variables
 
-@interface GPUImageView () 
+@interface GPUImageView ()
 {
     GPUImageFramebuffer *inputFramebufferForDisplay;
     GLuint displayRenderbuffer, displayFramebuffer;
@@ -25,6 +25,8 @@
 }
 
 @property (assign, nonatomic) NSUInteger aspectRatio;
+
+@property (nonatomic, assign) CGRect viewBounds;
 
 // Initialization and teardown
 - (void)commonInit;
@@ -48,7 +50,7 @@
 #pragma mark -
 #pragma mark Initialization and teardown
 
-+ (Class)layerClass 
++ (Class)layerClass
 {
 	return [CAEAGLLayer class];
 }
@@ -67,7 +69,7 @@
 
 -(id)initWithCoder:(NSCoder *)coder
 {
-	if (!(self = [super initWithCoder:coder])) 
+	if (!(self = [super initWithCoder:coder]))
     {
         return nil;
 	}
@@ -79,7 +81,8 @@
 
 - (void)commonInit;
 {
-    // Set scaling to account for Retina display	
+    self.viewBounds = self.bounds;
+    // Set scaling to account for Retina display
     if ([self respondsToSelector:@selector(setContentScaleFactor:)])
     {
         self.contentScaleFactor = [[UIScreen mainScreen] scale];
@@ -132,6 +135,8 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
+    self.viewBounds = self.bounds;
     
     // The frame buffer needs to be trashed and re-created when the view size changes.
     if (!CGSizeEqualToSize(self.bounds.size, boundsSizeAtFrameBufferEpoch) &&
@@ -232,12 +237,12 @@
     runSynchronouslyOnVideoProcessingQueue(^{
         CGFloat heightScaling, widthScaling;
         
-        CGSize currentViewSize = self.bounds.size;
+        CGSize currentViewSize = self.viewBounds.size;
         
         //    CGFloat imageAspectRatio = inputImageSize.width / inputImageSize.height;
         //    CGFloat viewAspectRatio = currentViewSize.width / currentViewSize.height;
         
-        CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(inputImageSize, self.bounds);
+        CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(inputImageSize, self.viewBounds);
         
         switch(_fillMode)
         {
