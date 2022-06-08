@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'GPUImage'
-  s.version  = '0.1.8'
+  s.version  = '0.1.9'
   s.license  = 'BSD'
   s.summary  = 'An open source iOS framework for GPU-based image and video processing.'
   s.homepage = 'https://github.com/BradLarson/GPUImage'
@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.6'
   s.osx.exclude_files = 'framework/Source/iOS',
                         'framework/Source/GPUImageFilterPipeline.*',
+                        'framework/Source/GPUImageMovie.*',
                         'framework/Source/GPUImageMovieComposition.*',
                         'framework/Source/GPUImageVideoCamera.*',
                         'framework/Source/GPUImageStillCamera.*',
